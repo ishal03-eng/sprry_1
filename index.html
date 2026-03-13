@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Palku 💕</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --rose: #c0435a;
+    --blush: #f2a7b8;
+    --cream: #fdf6f0;
+    --deep: #1a0a0f;
+    --gold: #c9a96e;
+    --petal: #f7d4dc;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--deep);
+    color: var(--cream);
+    font-family: 'Cormorant Garamond', serif;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* ── STARFIELD ── */
+  #stars {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    overflow: hidden;
+  }
+  .star {
+    position: absolute;
+    border-radius: 50%;
+    background: white;
+    animation: twinkle var(--d) ease-in-out infinite alternate;
+  }
+  @keyframes twinkle { from { opacity: .1; } to { opacity: .9; } }
+
+  /* ── PETALS ── */
+  .petal {
+    position: fixed;
+    font-size: 1.2rem;
+    animation: fall linear infinite;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0;
+  }
+  @keyframes fall {
+    0%   { transform: translateY(-60px) rotate(0deg); opacity: .85; }
+    100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+  }
+
+  /* ── LAYOUT ── */
+  .scene {
+    position: relative; z-index: 2;
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 60px 24px;
+  }
+
+  /* ── HERO ── */
+  #hero { text-align: center; gap: 24px; }
+
+  .date-badge {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1rem;
+    letter-spacing: .3em;
+    color: var(--gold);
+    opacity: 0;
+    animation: fadeUp .9s ease forwards .3s;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 10vw, 7rem);
+    font-weight: 700;
+    line-height: 1;
+    color: var(--cream);
+    opacity: 0;
+    animation: fadeUp 1s ease forwards .6s;
+  }
+  .hero-title span { color: var(--blush); font-style: italic; }
+
+  .hero-sub {
+    font-size: clamp(1.1rem, 3vw, 1.5rem);
+    font-style: italic;
+    color: var(--petal);
+    max-width: 480px;
+    line-height: 1.7;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 1s;
+  }
+
+  .scroll-hint {
+    margin-top: 40px;
+    font-size: .85rem;
+    letter-spacing: .25em;
+    color: var(--gold);
+    opacity: 0;
+    animation: fadeUp .8s ease forwards 1.8s, pulse 2s ease-in-out infinite 2.6s;
+  }
+  @keyframes pulse { 0%,100%{opacity:.5} 50%{opacity:1} }
+
+  /* ── HEART DIVIDER ── */
+  .heart-divider {
+    font-size: 2rem;
+    text-align: center;
+    animation: heartbeat 1.4s ease-in-out infinite;
+    display: block;
+    margin: 12px 0;
+  }
+  @keyframes heartbeat {
+    0%,100% { transform: scale(1); }
+    14%     { transform: scale(1.25); }
+    28%     { transform: scale(1); }
+    42%     { transform: scale(1.15); }
+    56%     { transform: scale(1); }
+  }
+
+  /* ── LETTER CARD ── */
+  .letter-wrap {
+    max-width: 680px;
+    width: 100%;
+  }
+
+  .letter-card {
+    background: linear-gradient(145deg, #2b1018 0%, #1a0a0f 100%);
+    border: 1px solid rgba(192,67,90,.3);
+    border-radius: 2px;
+    padding: clamp(32px, 6vw, 60px) clamp(28px, 6vw, 56px);
+    position: relative;
+    box-shadow: 0 0 80px rgba(192,67,90,.12), inset 0 0 60px rgba(0,0,0,.4);
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity .9s ease, transform .9s ease;
+  }
+  .letter-card.visible { opacity: 1; transform: translateY(0); }
+
+  .letter-card::before {
+    content: '❝';
+    position: absolute; top: 18px; left: 24px;
+    font-size: 4rem; color: var(--rose); opacity: .25;
+    font-family: 'Playfair Display', serif;
+    line-height: 1;
+  }
+  .letter-card::after {
+    content: '';
+    position: absolute; inset: 6px;
+    border: 1px solid rgba(201,169,110,.1);
+    border-radius: 1px; pointer-events: none;
+  }
+
+  .letter-greeting {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    color: var(--blush);
+    margin-bottom: 28px;
+  }
+
+  .letter-body {
+    font-size: clamp(1.05rem, 2vw, 1.25rem);
+    line-height: 2;
+    color: rgba(253,246,240,.82);
+    font-weight: 300;
+  }
+  .letter-body p + p { margin-top: 22px; }
+  .letter-body strong { color: var(--blush); font-weight: 400; font-style: italic; }
+
+  .letter-sign {
+    margin-top: 36px;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: clamp(1.3rem, 3vw, 1.7rem);
+    color: var(--gold);
+    text-align: right;
+  }
+
+  /* ── TIMELINE ── */
+  #memories { gap: 16px; }
+  .section-label {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    color: var(--blush);
+    text-align: center;
+    margin-bottom: 12px;
+  }
+
+  .memory-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    max-width: 680px;
+    width: 100%;
+  }
+  .memory-item {
+    background: rgba(192,67,90,.08);
+    border: 1px solid rgba(192,67,90,.2);
+    border-radius: 2px;
+    padding: 20px;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity .7s ease, transform .7s ease;
+  }
+  .memory-item.visible { opacity: 1; transform: translateY(0); }
+  .memory-item:hover { border-color: var(--rose); background: rgba(192,67,90,.14); }
+  .memory-emoji { font-size: 2.2rem; display: block; margin-bottom: 10px; }
+  .memory-text { font-size: .95rem; color: var(--petal); line-height: 1.6; font-style: italic; }
+
+  /* ── PROMISE ── */
+  #promise { gap: 20px; }
+  .promise-card {
+    max-width: 560px;
+    background: linear-gradient(135deg, #2b1018, #1a0a0f);
+    border: 1px solid rgba(201,169,110,.3);
+    padding: clamp(28px, 5vw, 52px);
+    text-align: center;
+    position: relative;
+    opacity: 0;
+    transform: scale(.95);
+    transition: opacity 1s ease, transform 1s ease;
+  }
+  .promise-card.visible { opacity: 1; transform: scale(1); }
+  .promise-card::before, .promise-card::after {
+    content: '';
+    position: absolute;
+    width: 24px; height: 24px;
+    border-color: var(--gold);
+    border-style: solid;
+    opacity: .4;
+  }
+  .promise-card::before { top: 10px; left: 10px; border-width: 1px 0 0 1px; }
+  .promise-card::after  { bottom: 10px; right: 10px; border-width: 0 1px 1px 0; }
+
+  .promise-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.4rem, 4vw, 2rem);
+    color: var(--gold);
+    margin-bottom: 20px;
+    font-style: italic;
+  }
+  .promise-list {
+    list-style: none;
+    text-align: left;
+  }
+  .promise-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(201,169,110,.1);
+    font-size: clamp(1rem, 2vw, 1.15rem);
+    color: var(--petal);
+    line-height: 1.6;
+    display: flex; align-items: flex-start; gap: 12px;
+  }
+  .promise-list li:last-child { border: none; }
+  .promise-list li::before { content: '✦'; color: var(--gold); flex-shrink: 0; margin-top: 2px; font-size: .8rem; }
+
+  /* ── FINAL CTA ── */
+  #finale { text-align: center; gap: 20px; }
+  .finale-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 7vw, 5rem);
+    font-style: italic;
+    color: var(--cream);
+    line-height: 1.1;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 1s ease, transform 1s ease;
+  }
+  .finale-title.visible { opacity: 1; transform: translateY(0); }
+  .finale-title span { color: var(--rose); }
+
+  .finale-sub {
+    font-size: clamp(1rem, 2.5vw, 1.3rem);
+    color: var(--petal);
+    font-style: italic;
+    max-width: 440px;
+    line-height: 1.8;
+    opacity: 0;
+    transition: opacity 1.2s ease .3s;
+  }
+  .finale-sub.visible { opacity: 1; }
+
+  .sorry-btn {
+    margin-top: 12px;
+    padding: 16px 48px;
+    background: transparent;
+    border: 1px solid var(--rose);
+    color: var(--blush);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    font-style: italic;
+    letter-spacing: .1em;
+    cursor: pointer;
+    transition: all .4s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .sorry-btn::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: var(--rose);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform .4s ease;
+    z-index: -1;
+  }
+  .sorry-btn:hover { color: var(--cream); border-color: var(--rose); }
+  .sorry-btn:hover::before { transform: scaleX(1); }
+
+  /* ── RESPONSE MODAL ── */
+  #modal {
+    position: fixed; inset: 0; z-index: 100;
+    background: rgba(10,2,5,.92);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity .5s ease;
+    backdrop-filter: blur(8px);
+  }
+  #modal.open { opacity: 1; pointer-events: all; }
+  .modal-box {
+    background: linear-gradient(145deg, #2b1018, #1a0a0f);
+    border: 1px solid rgba(192,67,90,.4);
+    padding: 48px 40px;
+    max-width: 440px;
+    text-align: center;
+    transform: scale(.9);
+    transition: transform .5s ease;
+  }
+  #modal.open .modal-box { transform: scale(1); }
+  .modal-box h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--blush);
+    margin-bottom: 16px;
+    font-style: italic;
+  }
+  .modal-box p { font-size: 1.1rem; color: var(--petal); line-height: 1.8; }
+  .modal-close {
+    margin-top: 28px;
+    padding: 12px 36px;
+    background: var(--rose);
+    border: none;
+    color: white;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background .3s;
+  }
+  .modal-close:hover { background: #a33349; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── SEPARATOR ── */
+  .sep { width: 80px; height: 1px; background: linear-gradient(90deg,transparent,var(--rose),transparent); margin: 0 auto; }
+
+  /* floating hearts */
+  #hearts-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+  .fh {
+    position: absolute;
+    font-size: 1rem;
+    animation: floatUp linear infinite;
+    opacity: 0;
+  }
+  @keyframes floatUp {
+    0%   { transform: translateY(0) scale(1); opacity: .4; }
+    100% { transform: translateY(-100vh) scale(.4); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div id="stars"></div>
+<div id="hearts-bg"></div>
+
+<!-- SCENE 1 — HERO -->
+<section class="scene" id="hero">
+  <p class="date-badge">14th March 2026 · Our First Year 🌹</p>
+  <h1 class="hero-title">For <span>Palku</span></h1>
+  <span class="heart-divider">♥</span>
+  <p class="hero-sub">A year of love, laughter, and a thousand little moments that made me the luckiest person alive.</p>
+  <p class="scroll-hint">↓ &nbsp; scroll, my love &nbsp; ↓</p>
+</section>
+
+<!-- SCENE 2 — LETTER -->
+<section class="scene">
+  <div class="letter-wrap">
+    <div class="letter-card reveal">
+      <p class="letter-greeting">My dearest Palku,</p>
+      <div class="letter-body">
+        <p>Today should have been <strong>ours</strong> — a day to hold each other close and celebrate the most beautiful year of my life. Instead, I'm not there, and I'm so deeply, terribly sorry.</p>
+        <p>I know no words can fix the empty chair beside you today. But I need you to know that even from miles away, every single thought of mine is wrapped around you. You were on my mind the moment I woke up and you'll be the last thing I think of tonight.</p>
+        <p>One year ago, something extraordinary happened — <strong>you chose me</strong>. And every single day since then, you have shown me what it means to be truly loved. Your laugh is my favourite song. Your smile is the best thing I've ever seen. You are, without any doubt, the greatest thing that has ever walked into my life.</p>
+        <p>Missing today breaks my heart. But it also reminds me how deeply I love you — because missing you hurts this much. I am <strong>so, so sorry</strong>, Palku. Please forgive me.</p>
+        <p>Our celebration isn't cancelled — it's just delayed. And when I'm finally back with you, I promise to make it a memory worth a thousand ordinary days.</p>
+      </div>
+      <p class="letter-sign">Forever yours, with all my love 💕</p>
+    </div>
+  </div>
+</section>
+
+<!-- SCENE 3 — MEMORIES -->
+<section class="scene" id="memories">
+  <p class="section-label">A year of us ✨</p>
+  <div class="sep" style="margin-bottom:32px"></div>
+  <div class="memory-grid">
+    <div class="memory-item reveal">
+      <span class="memory-emoji">🌅</span>
+      <p class="memory-text">The first time you smiled at me and the whole world went quiet</p>
+    </div>
+    <div class="memory-item reveal">
+      <span class="memory-emoji">📞</span>
+      <p class="memory-text">Those late-night calls where we talked till 3 AM without noticing</p>
+    </div>
+    <div class="memory-item reveal">
+      <span class="memory-emoji">🫶</span>
+      <p class="memory-text">Every tiny argument we worked through, hand in hand</p>
+    </div>
+    <div class="memory-item reveal">
+      <span class="memory-emoji">🌹</span>
+      <p class="memory-text">365 days of choosing each other, over and over again</p>
+    </div>
+    <div class="memory-item reveal">
+      <span class="memory-emoji">🌙</span>
+      <p class="memory-text">You being my calm on every stormy, chaotic day</p>
+    </div>
+    <div class="memory-item reveal">
+      <span class="memory-emoji">🫂</span>
+      <p class="memory-text">The way everything feels safe when I'm with you</p>
+    </div>
+  </div>
+</section>
+
+<!-- SCENE 4 — PROMISES -->
+<section class="scene" id="promise">
+  <p class="section-label">My promises to you 🌿</p>
+  <div class="sep" style="margin-bottom:32px"></div>
+  <div class="promise-card reveal">
+    <p class="promise-title">What I vow, today and always</p>
+    <ul class="promise-list">
+      <li>I will never let an anniversary pass like this again — you deserve every celebration.</li>
+      <li>I will make up for today in a way that makes you smile for a long, long time.</li>
+      <li>I will always choose us, even when it's hard, even when I fall short.</li>
+      <li>I will be the person worthy of the love you so generously give me.</li>
+      <li>I will hold your heart with more care than I hold anything else in this world.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- SCENE 5 — FINALE -->
+<section class="scene" id="finale">
+  <h2 class="finale-title reveal">I'm sorry, <span>Palku.</span></h2>
+  <p class="finale-sub reveal">And I love you more than any distance, any date, any missed moment could ever undo.</p>
+  <div class="sep" style="margin: 16px auto 28px"></div>
+  <button class="sorry-btn" onclick="openModal()">Tap here, my love 🌹</button>
+</section>
+
+<!-- MODAL -->
+<div id="modal">
+  <div class="modal-box">
+    <h2>Happy 1st Anniversary 🥂</h2>
+    <p>I'm not there in person, but every heartbeat I have today belongs to you. Thank you for the most beautiful year of my life. <strong style="color:var(--blush)">I love you, Palku.</strong> 💕</p>
+    <button class="modal-close" onclick="closeModal()">Close ♥</button>
+  </div>
+</div>
+
+<script>
+// ── STARS ──
+const starsEl = document.getElementById('stars');
+for (let i = 0; i < 180; i++) {
+  const s = document.createElement('div');
+  s.className = 'star';
+  const size = Math.random() * 2.5 + .5;
+  s.style.cssText = `
+    width:${size}px; height:${size}px;
+    top:${Math.random()*100}%; left:${Math.random()*100}%;
+    --d:${(Math.random()*3+1.5).toFixed(1)}s;
+    animation-delay:${(Math.random()*4).toFixed(1)}s
+  `;
+  starsEl.appendChild(s);
+}
+
+// ── PETALS ──
+const petals = ['🌸','🌺','🌹','❤️','💕','✿'];
+function spawnPetal() {
+  const p = document.createElement('div');
+  p.className = 'petal';
+  p.textContent = petals[Math.floor(Math.random()*petals.length)];
+  p.style.left = Math.random()*100 + 'vw';
+  p.style.fontSize = (Math.random()*16+10) + 'px';
+  p.style.animationDuration = (Math.random()*6+6) + 's';
+  p.style.animationDelay = (Math.random()*2) + 's';
+  document.body.appendChild(p);
+  setTimeout(() => p.remove(), 14000);
+}
+setInterval(spawnPetal, 600);
+
+// ── FLOATING HEARTS ──
+const hbg = document.getElementById('hearts-bg');
+function spawnHeart() {
+  const h = document.createElement('div');
+  h.className = 'fh';
+  h.textContent = ['♥','♡','💗','💓'][Math.floor(Math.random()*4)];
+  h.style.left = Math.random()*100 + 'vw';
+  h.style.bottom = '-20px';
+  h.style.animationDuration = (Math.random()*8+6) + 's';
+  h.style.animationDelay = (Math.random()*3) + 's';
+  h.style.fontSize = (Math.random()*14+8) + 'px';
+  h.style.color = ['#c0435a','#f2a7b8','#c9a96e','#f7d4dc'][Math.floor(Math.random()*4)];
+  hbg.appendChild(h);
+  setTimeout(() => h.remove(), 16000);
+}
+setInterval(spawnHeart, 900);
+
+// ── SCROLL REVEAL ──
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const items = e.target.classList.contains('reveal')
+        ? [e.target]
+        : e.target.querySelectorAll('.reveal');
+      items.forEach((el, i) => {
+        setTimeout(() => el.classList.add('visible'), i * 130);
+      });
+      if (e.target.classList.contains('reveal')) {
+        observer.unobserve(e.target);
+      }
+    }
+  });
+}, { threshold: 0.15 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ── MODAL ──
+function openModal() {
+  document.getElementById('modal').classList.add('open');
+  for (let i = 0; i < 20; i++) spawnPetal();
+}
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+}
+document.getElementById('modal').addEventListener('click', e => {
+  if (e.target === document.getElementById('modal')) closeModal();
+});
+</script>
+</body>
+</html>
